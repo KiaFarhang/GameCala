@@ -32,7 +32,6 @@ gulp.task('js-workflow', function(){
 		.pipe(babel({
 			presets: ['es2015']
 			}))
-		.pipe(autopolyfiller())
 		.pipe(uglify())
 	.pipe(gulp.dest('./dist/js/'))
 });
