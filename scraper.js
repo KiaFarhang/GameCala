@@ -4,15 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const fs = require('fs');
-const jsdom = require('jsdom')
-
-// var app = express();
-
-// app.use(express.static('dist'));
-
-// app.get('/', function(req, res){
-// 	res.sendFile('dist/index')
-// })
+const jsdom = require('jsdom');
 
 let options = {
     url: 'http://www.howlongtobeat.com/search_main.php?page=1',
@@ -28,9 +20,14 @@ request.get(options, function(error, response, body) {
             let doc = window.document;
  
             let games = doc.getElementsByClassName('search_list_details');
-            for (let i = 0; i < games.length; i++) {
-                let title = games[i].firstChild;
-                console.log(title.innerHTML);
+            // for (let i = 0; i < games.length; i++) {
+            //     let title = games[i].firstChild;
+            //     console.log(title.innerHTML);
+            // }
+
+            for (var game in games){
+                let html = games[game].innerHTML;
+                console.log(typeof html);
             }
         });
 
