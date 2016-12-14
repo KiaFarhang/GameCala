@@ -40,7 +40,7 @@ gulp.task('watch', function() {
 
 gulp.task('nodemon', function() {
     nodemon({
-            script: 'server.js',
+            script: 'scraper.js',
             ext: 'js scss html',
             env: {
                 'NODE_ENV': 'development'

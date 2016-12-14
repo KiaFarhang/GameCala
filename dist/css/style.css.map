@@ -1,0 +1,1 @@
+{"version":3,"sources":["_reset.scss"],"names":[],"mappings":"AAAA,EACC,SAAU,AACV,UAAW,AACX,SAAU,AACV,eAAgB,AAChB,aAAc,AACd,uBAAyB,CACzB,AAED,KACC,aAAe,CACf","file":"style.css","sourcesContent":["*{\r\n\tmargin: 0;\r\n\tpadding: 0;\r\n\tborder: 0;\r\n\tfont-size: 100%;\r\n\tfont: inherit;\r\n\tvertical-align: baseline;\r\n}\r\n\r\nbody{\r\n\tline-height: 1;\r\n}"]}
