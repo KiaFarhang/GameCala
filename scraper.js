@@ -6,12 +6,12 @@ const request = require('request');
 const fs = require('fs');
 const jsdom = require('jsdom');
 
-let page = 46;
-let gameNumber = 811;
+let page = 345;
+let gameNumber = 6211;
 
 
 let CronJob = require('cron').CronJob;
-let job = new CronJob('00 * * * * *', function() {
+let job = new CronJob('00 */2 * * * *', function() {
 
     if (page == 1) {
         let blankObj = {};
