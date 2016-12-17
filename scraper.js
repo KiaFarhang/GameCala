@@ -6,8 +6,8 @@ const request = require('request');
 const fs = require('fs');
 const jsdom = require('jsdom');
 
-let page = 345;
-let gameNumber = 6211;
+let page = 450;
+let gameNumber = 8820;
 
 
 let CronJob = require('cron').CronJob;
