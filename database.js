@@ -3,13 +3,25 @@
 const fs = require('fs');
 var pg = require('pg');
 
-const db_host = process.env.DB_HOST;
-const db_name = process.env.DB_NAME;
-const db_user = process.env.DB_USER;
-const db_pass = process.env.DB_PASS;
+require('dotenv').config();
 
-let client = new pg.Client(db_host);
-client.connect(function(error){
-	if (error) throw error;
-	console.log('Connected to database');
+let pgConfig = {
+	user: process.env.DB_USER,
+	database: process.env.DB_NAME,
+	password: process.env.DB_PASS,
+	host: process.env.DB_HOST,
+	port: process.env.DB_PORT,
+	max: 10,
+	idleTimeoutMillis: 30000
+};
+
+let pool = new pg.Pool(pgConfig);
+
+pool.connect(function(error, client, done){
+	if (error){
+		return console.log(`Error fetching client from pool: ${error}`);
+	}
+	client.query(`CREATE TABLE games
+	 ( Title 
+	 	) `)
 });
