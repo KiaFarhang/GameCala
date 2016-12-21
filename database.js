@@ -45,16 +45,19 @@ function retrieveGameFromJSON(index) {
 }
 
 function generateSQLQueryForGame(game) {
-    let columnString = ``;
-    let valueString = ``;
-    let propertyKeys = Object.keys(game);
-    // for (var name in propertyKeys) {
-    //     if (game[prop] != '--') {
-    //         columnString += `"${game[prop]}", `;
-    //     }
-    // }
-    // console.log(columnString);
-    console.log(propertyKeys.join(', '));
-    let query = `INSERT INTO games `;
+    let propertyKeys = [];
+    let propertyValues = [];
+    for (var key in game) {
+        if (game[key] != '--') {
+            propertyKeys.push(wrapStringInQuotes(key));
+            propertyValues.push(wrapStringInQuotes(game[key]));
+        }
+    }
+    let query = `INSERT INTO games (${propertyKeys}) VALUES (${propertyValues})`;
+    return query;
+
+    function wrapStringInQuotes(string) {
+        return `\"` + string + `\"`;
+    }
 
 }
