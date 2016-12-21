@@ -53,7 +53,7 @@ function generateSQLQueryForGame(game) {
             propertyValues.push(wrapStringInQuotes(game[key]));
         }
     }
-    let query = `INSERT INTO games (${propertyKeys}) VALUES (${propertyValues})`;
+    let query = `INSERT INTO games (${propertyKeys}) VALUES (${propertyValues}) ON CONFLICT ("Title") DO UPDATE`;
     return query;
 
     function wrapStringInQuotes(string) {
