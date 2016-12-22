@@ -17,25 +17,17 @@ let pgConfig = {
 
 let pool = new pg.Pool(pgConfig);
 
-// pool.connect(function(error, client, done){
-// 	if (error){
-// 		return console.log(`Error fetching client from pool: ${error}`);
-// 	}
-// 	client.query('SELECT * FROM public.games', function(err, result){
-// 		if (err) throw err;
-// 		console.log(result.rows[0]);
-// 		console.log(typeof result.rows[0]);
-// 	});
-// });
-
 pool.connect(function(error, client, done) {
     if (error) throw error;
-    let game = retrieveGameFromJSON(1);
-    generateSQLQueryForGame(game);
-    // client.query(`INSERT INTO games ("Title") VALUES ('${gameName}') ON CONFLICT ("Title") DO NOTHING`, function(err, result){
-    // 	if (err) throw err;
-    // 	console.log(result);
-    // });
+    let numberOfGames = getGameListLength();
+    for (let i = 1; i <= numberOfGames; i++) {
+        let game = retrieveGameFromJSON(i);
+        let sqlString = generateSQLQueryForGame(game);
+        client.query(sqlString, function(err, result) {
+            if (err) throw err;
+            console.log(result);
+        });
+    }
 });
 
 
@@ -44,20 +36,35 @@ function retrieveGameFromJSON(index) {
     return gameList[index];
 }
 
+function getGameListLength() {
+    let gameList = Object.keys(JSON.parse(fs.readFileSync('games.json', 'utf8')));
+    return gameList.length;
+}
+
 function generateSQLQueryForGame(game) {
     let propertyKeys = [];
     let propertyValues = [];
     for (var key in game) {
         if (game[key] != '--') {
-            propertyKeys.push(wrapStringInQuotes(key));
-            propertyValues.push(wrapStringInQuotes(game[key]));
+            propertyKeys.push(wrapStringInDoubleQuotes(key));
+            if (typeof game[key] == 'number') {
+                propertyValues.push(game[key]);
+            } else {
+                propertyValues.push(wrapStringInDollarQuotes(game[key]));
+            }
         }
     }
-    let query = `INSERT INTO games (${propertyKeys}) VALUES (${propertyValues}) ON CONFLICT ("Title") DO UPDATE`;
+    let query = `INSERT INTO games (${propertyKeys}) VALUES (${propertyValues}) ON CONFLICT ("Title") DO NOTHING`;
     return query;
+    
 
-    function wrapStringInQuotes(string) {
+    function wrapStringInDoubleQuotes(string) {
         return `\"` + string + `\"`;
     }
+
+    function wrapStringInDollarQuotes(string) {
+        return `$$` + string + `$$`;
+    }
+
 
 }
