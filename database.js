@@ -45,7 +45,7 @@ function generateSQLQueryForGame(game) {
     let propertyKeys = [];
     let propertyValues = [];
     for (var key in game) {
-        if (game[key] != '--') {
+        if (game[key] != '--' && game[key] != null) {
             propertyKeys.push(wrapStringInDoubleQuotes(key));
             if (typeof game[key] == 'number') {
                 propertyValues.push(game[key]);
