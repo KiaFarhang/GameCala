@@ -17,18 +17,18 @@ let pgConfig = {
 
 let pool = new pg.Pool(pgConfig);
 
-pool.connect(function(error, client, done) {
-    if (error) throw error;
-    let numberOfGames = getGameListLength();
-    for (let i = 10001; i <= 15000; i++) {
-        let game = retrieveGameFromJSON(i);
-        let sqlString = generateSQLQueryForGame(game);
-        client.query(sqlString, function(err, result) {
-            if (err) throw err;
-            console.log(result);
-        });
-    }
-});
+// pool.connect(function(error, client, done) {
+//     if (error) throw error;
+//     let numberOfGames = getGameListLength();
+//     for (let i = 1; i <= numberOfGames; i++) {
+//         let game = retrieveGameFromJSON(i);
+//         let sqlString = generateSQLQueryForGame(game);
+//         client.query(sqlString, function(err, result) {
+//             if (err) throw err;
+//             console.log(result);
+//         });
+//     }
+// });
 
 
 function retrieveGameFromJSON(index) {
