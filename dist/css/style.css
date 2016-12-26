@@ -1,2 +1,2 @@
-*{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}body{line-height:1}
+*{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}body{line-height:1}header{display:-ms-flexbox;display:flex;position:fixed;top:0;width:100%}header div{-ms-flex-preferred-size:33%;flex-basis:33%;text-align:center}main{margin-top:2rem}.visible{visibility:visible;opacity:1;transition:opacity 2s linear}.hidden{visibility:hidden;opacity:0;transition:visibility 0s 2s,opacity 2s linear}
 /*# sourceMappingURL=style.css.map */

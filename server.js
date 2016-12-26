@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const query = require('./db_query.js');
 
@@ -26,12 +27,24 @@ let options = {
     root: __dirname
 };
 
+let jsonParser = bodyParser.json();
+let urlencodedParser = bodyParser.urlencoded({ extended: false });
+
 app.use(express.static('dist'));
+
 
 app.get('/', function(request, response) {
     res.sendfile('dist/index.html', options);
 });
 
-console.log(query.queryLikeTitle('Final Fantasy VII'));
+app.get('/query', urlencodedParser, function(request, response) {
+    let gameQuery = request.headers.query;
+    let promise = query.queryLikeTitle(gameQuery);
+    promise.then(sendJSON, console.error);
+
+    function sendJSON(data) {
+        response.send(JSON.stringify(data));
+    }
+});
 
 app.listen(8080);

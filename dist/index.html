@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="stylesheet" href="dist/css/style.css">
     <title>Title</title>
     <meta name="description" content="">
     <meta property="og:locale" content="en_US">
@@ -25,8 +24,36 @@
 </head>
 
 <body>
-<h1>Hello! This is a test.</h1>
-    <script src="dist/js/script.js"></script>
+    <header>
+        <div>I</div>
+        <div>II</div>
+        <div>III</div>
+    </header>
+    <main>
+        <section class="one visible">
+            <div>
+                <p>How many hours per week do you game?</p>
+                <form action="">
+                    <input type="text" class="timeBox" placeholder="5">
+                </form>
+            </div>
+        </section>
+        <section class="hidden">
+            <div class="search">
+            <p>Select games to compare.</p>
+                <input type="text" class="searchBox" placeholder="Search...">
+                <div class="searchResults">
+                    <ul class="resultsList"></ul>
+                </div>
+                <button class="goToCompare">Compare</button>
+            </div>
+        </section>
+        <section class="hidden">
+            <div class="compare">
+            </div>
+        </section>
+    </main>
+    <script src="js/script.js"></script>
 </body>
 
 </html>

@@ -1,1 +1,64 @@
 @import 'reset';
+// @keyframes fadeOut {
+//     0% {
+//         opacity: 1;
+//     }
+//     25% {
+//         opacity: .75;
+//     }
+//     50% {
+//         opacity: .5;
+//     }
+//     75% {
+//         opacity: .25;
+//     }
+//     100% {
+//         opacity: 0;
+//     }
+// }
+
+// @keyframes fadeIn{
+// 	0% {
+//         opacity: 0;
+//     }
+//     25% {
+//         opacity: .25;
+//     }
+//     50% {
+//         opacity: .5;
+//     }
+//     75% {
+//         opacity: .75;
+//     }
+//     100% {
+//         opacity: 1;
+//     }
+// }
+
+header {
+    display: flex;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    div {
+        flex-basis: 33%;
+        text-align: center;
+    }
+}
+
+main {
+    margin-top: 2rem;
+}
+
+
+.visible{
+	visibility: visible;
+	opacity: 1;
+	transition: opacity 2s linear;
+}
+
+.hidden{
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s 2s, opacity 2s linear;
+}
