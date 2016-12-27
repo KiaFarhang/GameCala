@@ -1,40 +1,4 @@
 @import 'reset';
-// @keyframes fadeOut {
-//     0% {
-//         opacity: 1;
-//     }
-//     25% {
-//         opacity: .75;
-//     }
-//     50% {
-//         opacity: .5;
-//     }
-//     75% {
-//         opacity: .25;
-//     }
-//     100% {
-//         opacity: 0;
-//     }
-// }
-
-// @keyframes fadeIn{
-// 	0% {
-//         opacity: 0;
-//     }
-//     25% {
-//         opacity: .25;
-//     }
-//     50% {
-//         opacity: .5;
-//     }
-//     75% {
-//         opacity: .75;
-//     }
-//     100% {
-//         opacity: 1;
-//     }
-// }
-
 header {
     display: flex;
     position: fixed;
@@ -50,15 +14,37 @@ main {
     margin-top: 2rem;
 }
 
-
-.visible{
-	visibility: visible;
-	opacity: 1;
-	transition: opacity 2s linear;
+section {
+    position: absolute;
+    top: 5rem;
 }
 
-.hidden{
-	visibility: hidden;
-	opacity: 0;
-	transition: visibility 0s 2s, opacity 2s linear;
+.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 1s linear;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 1s, opacity 1s linear;
+}
+
+form.error {
+    &::after {
+        content: 'Please enter a number!';
+        display: block;
+    }
+}
+
+ul.resultsList{
+	li{
+		&.added{
+			border: 1px solid black;
+			// &::after{
+			// 	content: 'Added!';
+			// }
+		}
+	}
 }

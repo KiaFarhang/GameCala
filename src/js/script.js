@@ -1,11 +1,33 @@
+// TODO:
+
+// -Better feedback when you click a game and add it to the list
+// -Fix ampersands in game titles (need to do in DB)
+// -Remove accent marks in titles in database
+// -Add to/replace weeks calculations with target day
+// -Recalculate times when new weekly hour submitted
+// -Delete games from list on third-pane click
+
 'use strict';
 
-document.forms[0].addEventListener('submit', handleTimeInput);
-let searchBox = document.getElementsByClassName('searchBox')[0];
-searchBox.addEventListener('keyup', handleSearchInput);
-document.getElementsByClassName('goToCompare')[0].addEventListener('click', handleGoToCompare);
-
 let timePlayedPerWeek = null;
+let searchBox = document.getElementsByClassName('searchBox')[0];
+
+addEventListeners();
+
+function addEventListeners() {
+    document.forms[0].addEventListener('submit', handleTimeInput);
+    searchBox.addEventListener('keyup', handleSearchInput);
+    document.getElementsByClassName('goToCompare')[0].addEventListener('click', handleGoToCompare);
+
+    let headerTabs = document.getElementsByTagName('header')[0].getElementsByTagName('div');
+    for (let i = 0; i < headerTabs.length; i++) {
+        headerTabs[i].addEventListener('click', function() {
+            transitionToSection(i + 1);
+        });
+    }
+
+    document.getElementsByClassName('clearComparePane')[0].addEventListener('click', clearComparePane);
+}
 
 function Game(object) {
     for (var key in object) {
@@ -16,14 +38,28 @@ function Game(object) {
 }
 
 function handleGoToCompare() {
-    visibilityToggle(3);
+    makeTabVisible(3);
+    transitionToSection(3);
 }
 
 function handleTimeInput(event) {
     event.preventDefault();
-    let input = document.getElementsByClassName('timeBox')[0];
-    timePlayedPerWeek = parseInt(input.value);
-    visibilityToggle(2);
+    let input = parseInt(document.getElementsByClassName('timeBox')[0].value);
+
+    if (isNaN(input)) {
+        throwTimePlayedError();
+    } else {
+        document.forms[0].classList.remove('error');
+        timePlayedPerWeek = input;
+        makeTabVisible(2);
+        transitionToSection(2);
+    }
+}
+
+function throwTimePlayedError() {
+    let form = document.forms[0];
+    form.classList.add('error');
+    form.getElementsByClassName('timeBox')[0].value = '';
 }
 
 function handleSearchInput() {
@@ -90,9 +126,32 @@ function displayGamesInSearch(arrayOfGames) {
     }
 }
 
+function isAlreadyInResults(title) {
+    let resultsTitles = document.getElementsByClassName('resultsTitle');
+    if (resultsTitles.length == 0) {
+        return false;
+    }
+    for (let i = 0; i < resultsTitles.length; i++) {
+        if (title == resultsTitles[i].textContent) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function showGameAsAdded(li) {
+    if (li.classList.contains('added') != true) {
+        li.classList.add('added');
+    }
+}
+
 function constructGameEventListener(game) {
     let func = function() {
-        appendGameToCompareList(game);
+        let title = game.Title;
+        if (isAlreadyInResults(title) == false) {
+            showGameAsAdded(event.target);
+            appendGameToCompareList(game);
+        }
     }
     return func;
 }
@@ -119,6 +178,7 @@ function appendGameToCompareList(game) {
     let title = game.Title;
     let titleGraf = document.createElement('p');
     titleGraf.innerText = title;
+    titleGraf.classList.add('resultsTitle');
     div.appendChild(titleGraf);
 
     for (var key in game) {
@@ -133,8 +193,8 @@ function appendGameToCompareList(game) {
 }
 
 function constructString(property, value) {
-    let length = calculateWeeksNeeded(parseInt(value));
-    return `${length} weeks for ${property}`;
+    let weeks = calculateWeeksNeeded(parseInt(value));
+    return `${weeks} weeks for ${property}`;
 }
 
 function calculateWeeksNeeded(length) {
@@ -161,13 +221,22 @@ function getCurrentVisibleSection() {
     }
 }
 
+function transitionToSection(section) {
+    visibilityToggle(section);
+}
+
+function makeTabVisible(tab) {
+    let tabs = document.getElementsByTagName('header')[0].getElementsByTagName('div');
+    changeVisibility(tabs[tab - 1]);
+}
 
 
-
-
-
-
-
+function clearComparePane() {
+    let comparePane = document.getElementsByClassName('compare')[0];
+    while (comparePane.firstChild) {
+        comparePane.removeChild(comparePane.firstChild);
+    }
+}
 
 
 
