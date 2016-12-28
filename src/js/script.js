@@ -3,9 +3,9 @@
 // -Better feedback when you click a game and add it to the list
 // -Fix ampersands in game titles (need to do in DB)
 // -Remove accent marks in titles in database
-// -Add to/replace weeks calculations with target day
-// -Recalculate times when new weekly hour submitted
+// -Recalculate times when new weekly hour submitted (store current list in global object)
 // -Delete games from list on third-pane click
+// -Does it make sense to include "Combined" in results?
 
 'use strict';
 
@@ -194,11 +194,31 @@ function appendGameToCompareList(game) {
 
 function constructString(property, value) {
     let weeks = calculateWeeksNeeded(parseInt(value));
-    return `${weeks} weeks for ${property}`;
+    let futureDate = parseDateIntoString(addDaysToDate(weeks * 7));
+    return `About ${weeks} weeks for ${property} (Finish around ${futureDate})`;
 }
 
 function calculateWeeksNeeded(length) {
-    return length / timePlayedPerWeek;
+    return Math.round(length / timePlayedPerWeek);
+}
+
+function addDaysToDate(days) {
+    let result = new Date();
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
+function parseDateIntoString(date) {
+    let months = ["January", "February", "March",
+        "April", "May", "June",
+        "July", "August", "September",
+        "October", "November", "December"
+    ]
+
+    let month = months[date.getMonth()];
+    let day = date.getDate();
+    let year = date.getFullYear();
+    return `${month} ${day}, ${year}`;
 }
 
 function visibilityToggle(sectionOn) {
