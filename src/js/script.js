@@ -15,6 +15,7 @@ let timePlayedPerWeek = null;
 let searchBox = document.getElementsByClassName('searchBox')[0];
 
 addEventListeners();
+document.getElementsByClassName('timeBox')[0].focus();
 
 function addEventListeners() {
     document.forms[0].addEventListener('submit', handleTimeInput);
