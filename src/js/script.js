@@ -3,9 +3,11 @@
 // -Better feedback when you click a game and add it to the list
 // -Fix ampersands in game titles (need to do in DB)
 // -Remove accent marks in titles in database
-// -Recalculate times when new weekly hour submitted (store current list in global object)
+// -Add to/replace weeks calculations with target day
+// -Recalculate times when new weekly hour submitted
 // -Delete games from list on third-pane click
-// -Does it make sense to include "Combined" in results?
+// -Stop user from clicking compare button until games are selected
+// -Split results strings up to say week/weeks, add styling to properties 
 
 'use strict';
 
@@ -182,7 +184,7 @@ function appendGameToCompareList(game) {
     div.appendChild(titleGraf);
 
     for (var key in game) {
-        if (key != 'Title') {
+        if (key != 'Title' &&  key != 'Combined') {
             let infoString = constructString(key, game[key]);
             let p = document.createElement('p');
             p.innerText = infoString;
@@ -195,7 +197,7 @@ function appendGameToCompareList(game) {
 function constructString(property, value) {
     let weeks = calculateWeeksNeeded(parseInt(value));
     let futureDate = parseDateIntoString(addDaysToDate(weeks * 7));
-    return `About ${weeks} weeks for ${property} (Finish around ${futureDate})`;
+    return `${property}: ${weeks} weeks (${futureDate})`;
 }
 
 function calculateWeeksNeeded(length) {
@@ -247,7 +249,10 @@ function transitionToSection(section) {
 
 function makeTabVisible(tab) {
     let tabs = document.getElementsByTagName('header')[0].getElementsByTagName('div');
-    changeVisibility(tabs[tab - 1]);
+    if (tabs[tab - 1].classList.contains('hidden')) {
+        changeVisibility(tabs[tab - 1]);
+    }
+    
 }
 
 
