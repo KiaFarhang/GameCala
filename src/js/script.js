@@ -56,6 +56,7 @@ function handleTimeInput(event) {
         timePlayedPerWeek = input;
         makeTabVisible(2);
         transitionToSection(2);
+        document.getElementsByClassName('searchBox')[0].focus();
     }
 }
 

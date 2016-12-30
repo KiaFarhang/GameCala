@@ -8,6 +8,7 @@ $orange: #FF471A;
 
 body {
     line-height: 1.3;
+    width: 100%;
 }
 
 header {
@@ -17,18 +18,28 @@ header {
     width: 100%;
     div {
         flex-basis: 33%;
+        padding: .33rem;
         text-align: center;
+        &:nth-of-type(1) {
+            background: $orange;
+        }
+        &:nth-of-type(2) {
+            background: lighten($orange, 7.5%);
+        }
+        &:nth-of-type(3) {
+            background: lighten($orange, 15%);
+        }
     }
 }
 
 main {
     margin: 2rem auto 0;
-    width: 90%;
 }
 
 section {
     position: absolute;
     top: 5rem;
+    width: 100%;
     input {
         border: 1px solid $blue;
         border-radius: 10px;
@@ -42,13 +53,12 @@ section {
     }
     &.two {
         div.search {
-            width: 90%;
             ul.resultsList {
                 list-style-type: none;
                 li {
                     // border: 1px solid $blue;
                     // border-radius: 10px;
-                    // padding: .33rem;
+                    padding: .8rem;
                     // margin: .33rem 0;
                     &:nth-of-type(1) {
                         background: $orange;
@@ -92,10 +102,39 @@ section {
     }
     &.three {
         div.compareGame {
-            border: 1px solid $blue;
-            border-radius: 10px;
+            background: $orange;
             padding: .33rem;
             margin: .33rem 0;
+            &:nth-of-type(1) {
+                background: $orange;
+            }
+            &:nth-of-type(2) {
+                background: lighten($orange, 2.5%);
+            }
+            &:nth-of-type(3) {
+                background: lighten($orange, 5%);
+            }
+            &:nth-of-type(4) {
+                background: lighten($orange, 7.5%);
+            }
+            &:nth-of-type(5) {
+                background: lighten($orange, 10%);
+            }
+            &:nth-of-type(6) {
+                background: lighten($orange, 12.5%);
+            }
+            &:nth-of-type(7) {
+                background: lighten($orange, 15%);
+            }
+            &:nth-of-type(8) {
+                background: lighten($orange, 17.5%);
+            }
+            &:nth-of-type(9) {
+                background: lighten($orange, 20%);
+            }
+            &:nth-of-type(10) {
+                background: lighten($orange, 22.5%);
+            }
         }
     }
 }
