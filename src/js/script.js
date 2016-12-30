@@ -8,6 +8,7 @@
 // -Delete games from list on third-pane click
 // -Stop user from clicking compare button until games are selected
 // -Split results strings up to say week/weeks, add styling to properties 
+// -Make sure header is always on top (z-index?) Or remove fixed positioning
 
 'use strict';
 
