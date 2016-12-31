@@ -1,5 +1,5 @@
 @import 'reset';
-$blue: #84C8FF;
+$blue: #0035CC;
 $green: #6DE89B;
 $orange: #FF471A;
 $black: #3D3D3D;
@@ -117,6 +117,20 @@ section {
             background: $orange;
             padding: .33rem;
             margin: .33rem 0;
+            opacity: 1;
+            transition: opacity .5s linear;
+            &.deleted{
+            	opacity: 0;
+            }
+            div.deleteButton{
+            	background: $blue;
+            	border-radius: .5rem;
+            	float: right;
+            	height: 1.5rem;
+            	right: 1rem;
+            	text-align: center;
+            	width: 1.5rem;
+            }
             &:nth-of-type(1) {
                 background: $orange;
             }

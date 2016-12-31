@@ -5,6 +5,7 @@ const sass = require('gulp-sass');
 const cssnano = require('gulp-cssnano');
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
+const concat = require('gulp-concat');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const nodemon = require('gulp-nodemon');
@@ -24,7 +25,8 @@ gulp.task('css-workflow', function() {
 });
 
 gulp.task('js-workflow', function() {
-    gulp.src('./src/js/**/*.js')
+    gulp.src(['./src/js/**/util.js', './src/js/**/script.js'])
+        .pipe(concat('script.js'))
         .pipe(babel({
             presets: ['es2015']
         }))

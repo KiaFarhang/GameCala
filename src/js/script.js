@@ -5,7 +5,6 @@
 // -Remove accent marks in titles in database
 // -Add to/replace weeks calculations with target day
 // -Recalculate times when new weekly hour submitted
-// -Delete games from list on third-pane click
 // -Stop user from clicking compare button until games are selected
 // -Split results strings up to say week/weeks, add styling to properties 
 // -Make sure header is always on top (z-index?) Or remove fixed positioning
@@ -85,8 +84,7 @@ function handleSearchInput() {
 
 function queryOnTitle(string) {
     return new Promise((resolve, reject) => {
-        let request = new XMLHttpRequest();
-        request.open('GET', '/query', true);
+        let request = ajax('GET', '/query');
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         request.setRequestHeader('QUERY', `${string}`);
 
@@ -180,6 +178,12 @@ function appendGameToCompareList(game) {
     let div = document.createElement('div');
     div.classList.add('compareGame');
 
+    let x = document.createElement('div');
+    x.classList.add('deleteButton');
+    x.innerText = 'X';
+    x.addEventListener('click', deleteGameFromCompareList);
+    div.appendChild(x);
+
     let title = game.Title;
     let titleGraf = document.createElement('p');
     titleGraf.innerText = title;
@@ -187,7 +191,7 @@ function appendGameToCompareList(game) {
     div.appendChild(titleGraf);
 
     for (var key in game) {
-        if (key != 'Title' &&  key != 'Combined') {
+        if (key != 'Title' && key != 'Combined') {
             let infoString = constructString(key, game[key]);
             let p = document.createElement('p');
             p.innerText = infoString;
@@ -255,9 +259,8 @@ function makeTabVisible(tab) {
     if (tabs[tab - 1].classList.contains('hidden')) {
         changeVisibility(tabs[tab - 1]);
     }
-    
-}
 
+}
 
 function clearComparePane() {
     let comparePane = document.getElementsByClassName('compare')[0];
@@ -266,6 +269,13 @@ function clearComparePane() {
     }
 }
 
+function deleteGameFromCompareList(event) {
+    let game = event.target.parentElement;
+    game.classList.add('deleted');
+    setTimeout(function() {
+        deleteElement(game);
+    }, 500);
+}
 
 
 
