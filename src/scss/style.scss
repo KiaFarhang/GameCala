@@ -54,7 +54,6 @@ section {
             outline: none;
         }
         &.searchBox {
-            border: 1px solid $green;
         }
     }
     &.one, .two{
@@ -68,7 +67,6 @@ section {
             ul.resultsList {
                 list-style-type: none;
                 li {
-                    // border: 1px solid $blue;
                     padding: .8rem;
                     // margin: .33rem 0;
                     &:nth-of-type(1) {
