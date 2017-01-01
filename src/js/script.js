@@ -1,17 +1,16 @@
 // TODO:
 
-// -Better feedback when you click a game and add it to the list
-// -Fix ampersands in game titles (need to do in DB)
-// -Remove accent marks in titles in database
-// -Add to/replace weeks calculations with target day
-// -Recalculate times when new weekly hour submitted
-// -Stop user from clicking compare button until games are selected
 // -Split results strings up to say week/weeks, add styling to properties 
 // -Make sure header is always on top (z-index?) Or remove fixed positioning
+// -Keep "Added" persistent even after searching for something else
+// -Tell user when values recalcultaed (where to send them on mobile?)
+
 
 'use strict';
 
-let timePlayedPerWeek = null;
+let currentGameResults = [];
+
+let timePlayedPerDay = null;
 let searchBox = document.getElementsByClassName('searchBox')[0];
 
 addEventListeners();
@@ -30,6 +29,8 @@ function addEventListeners() {
     }
 
     document.getElementsByClassName('clearComparePane')[0].addEventListener('click', clearComparePane);
+    document.getElementsByClassName('clearComparePane')[0].addEventListener('click', deselectWholeSearchList);
+    document.getElementsByClassName('clearComparePane')[0].addEventListener('click', clearGlobalGameArray);
 }
 
 function Game(object) {
@@ -41,22 +42,38 @@ function Game(object) {
 }
 
 function handleGoToCompare() {
-    makeTabVisible(3);
-    transitionToSection(3);
+    if (isCompareListEmpty() == true) {
+        document.getElementsByClassName('compareError')[0].textContent = 'Select games to compare';
+    } else {
+        document.getElementsByClassName('compareError')[0].textContent = '';
+        makeTabVisible(3);
+        transitionToSection(3);
+    }
 }
 
 function handleTimeInput(event) {
     event.preventDefault();
-    let input = parseInt(document.getElementsByClassName('timeBox')[0].value);
+    // let input = parseInt(document.getElementsByClassName('timeBox')[0].value);
+    let input = document.getElementsByClassName('timeBox')[0].value;
 
-    if (isNaN(input)) {
+    if (isNaN(input) || input > 24) {
         throwTimePlayedError();
-    } else {
-        document.forms[0].classList.remove('error');
-        timePlayedPerWeek = input;
+        return;
+    }
+
+
+    document.forms[0].classList.remove('error');
+    if (timePlayedPerDay == null) {
+        timePlayedPerDay = input;
         makeTabVisible(2);
         transitionToSection(2);
         document.getElementsByClassName('searchBox')[0].focus();
+    } else {
+        timePlayedPerDay = input;
+        clearComparePane();
+        for (let i = 0; i < currentGameResults.length; i++) {
+            appendGameToCompareList(currentGameResults[i]);
+        }
     }
 }
 
@@ -122,7 +139,7 @@ function displayGamesInSearch(arrayOfGames) {
     for (let i = 0; i < arrayOfGames.length; i++) {
         let title = arrayOfGames[i].Title;
         let li = document.createElement('li');
-        li.innerText = title;
+        li.textContent = title;
         let clickFunction = constructGameEventListener(arrayOfGames[i]);
         li.addEventListener('click', clickFunction);
         list.appendChild(li);
@@ -142,18 +159,15 @@ function isAlreadyInResults(title) {
     return false;
 }
 
-function showGameAsAdded(li) {
-    if (li.classList.contains('added') != true) {
-        li.classList.add('added');
-    }
-}
-
 function constructGameEventListener(game) {
     let func = function() {
+        event.target.classList.toggle('added');
         let title = game.Title;
         if (isAlreadyInResults(title) == false) {
-            showGameAsAdded(event.target);
             appendGameToCompareList(game);
+        } else {
+            let gameToDelete = grabGameByTitle(title, 'results');
+            deleteElement(gameToDelete);
         }
     }
     return func;
@@ -170,11 +184,16 @@ function displaySearchError() {
     let list = document.getElementsByClassName('resultsList')[0];
     let li = document.createElement('li');
     li.classList.add('error');
-    li.innerText = 'No search results found.';
+    li.textContent = 'No search results found.';
     list.appendChild(li);
 }
 
 function appendGameToCompareList(game) {
+
+    if (isAlreadyInGlobalArray(game) == false) {
+        currentGameResults.push(game);
+    }
+
     let div = document.createElement('div');
     div.classList.add('compareGame');
 
@@ -190,26 +209,51 @@ function appendGameToCompareList(game) {
     titleGraf.classList.add('resultsTitle');
     div.appendChild(titleGraf);
 
-    for (var key in game) {
-        if (key != 'Title' && key != 'Combined') {
-            let infoString = constructString(key, game[key]);
-            let p = document.createElement('p');
-            p.innerText = infoString;
-            div.appendChild(p);
-        }
+    let arrayOfStrings = createArrayOfInfoStrings(game);
+    appendArrayContentsToElement(arrayOfStrings, div);
+
+    if (div.getElementsByTagName('p').length == 1) {
+        let noInfo = document.createElement('p');
+        noInfo.textContent = 'No info in database';
+        div.appendChild(noInfo);
     }
     document.getElementsByClassName('compare')[0].appendChild(div);
 }
 
-function constructString(property, value) {
-    let weeks = calculateWeeksNeeded(parseInt(value));
-    let futureDate = parseDateIntoString(addDaysToDate(weeks * 7));
-    return `${property}: ${weeks} weeks (${futureDate})`;
+function createArrayOfInfoStrings(game) {
+    let array = [];
+    for (var key in game) {
+        if (key != 'Title' && key != 'Combined') {
+            let infoString = constructString(key, game[key]);
+            let p = document.createElement('p');
+            p.textContent = infoString;
+            array.push(p);
+        }
+    }
+    return array;
 }
 
-function calculateWeeksNeeded(length) {
-    return Math.round(length / timePlayedPerWeek);
+function appendArrayContentsToElement(array, element) {
+    for (let i = 0; i < array.length; i++) {
+        element.appendChild(array[i]);
+    }
 }
+
+function constructString(property, value) {
+    let days = Math.round(value / timePlayedPerDay);
+    let futureDate = parseDateIntoString(addDaysToDate(days));
+    if (days == 0) {
+        return `${property}: Finish today`;
+    }
+    if (days == 1) {
+        return `${property}: ${days} day (${futureDate})`;
+    }
+    return `${property}: ${days} days (${futureDate})`;
+}
+
+// function calculateWeeksNeeded(length) {
+//     return Math.round(length / timePlayedPerDay);
+// }
 
 function addDaysToDate(days) {
     let result = new Date();
@@ -252,6 +296,12 @@ function getCurrentVisibleSection() {
 
 function transitionToSection(section) {
     visibilityToggle(section);
+    setCurrentHeader(section - 1);
+}
+
+function setCurrentHeader(newHeader) {
+    document.getElementsByTagName('header')[0].getElementsByClassName('current')[0].classList.remove('current');
+    document.getElementsByTagName('header')[0].getElementsByTagName('div')[newHeader].classList.add('current');
 }
 
 function makeTabVisible(tab) {
@@ -267,15 +317,81 @@ function clearComparePane() {
     while (comparePane.firstChild) {
         comparePane.removeChild(comparePane.firstChild);
     }
+
+}
+
+function deselectWholeSearchList() {
+    let list = document.getElementsByClassName('resultsList')[0].getElementsByTagName('li');
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].classList.contains('added')) {
+            list[i].classList.remove('added');
+        }
+    }
 }
 
 function deleteGameFromCompareList(event) {
     let game = event.target.parentElement;
+    let gameTitle = game.getElementsByClassName('resultsTitle')[0].textContent;
+    let gameInSearch = grabGameByTitle(gameTitle, 'search');
+    if (gameInSearch != null) {
+        gameInSearch.classList.remove('added');
+    }
     game.classList.add('deleted');
     setTimeout(function() {
         deleteElement(game);
     }, 500);
+    deleteGameFromCurrentArray(gameTitle);
 }
+
+function isCompareListEmpty() {
+    if (document.getElementsByClassName('compareGame').length == 0) {
+        return true;
+    }
+    return false;
+}
+
+function grabGameByTitle(title, location) {
+
+    if (location == 'results') {
+        let resultsTitles = document.getElementsByClassName('resultsTitle');
+        for (let i = 0; i < resultsTitles.length; i++) {
+            if (title == resultsTitles[i].textContent) {
+                return resultsTitles[i].parentElement;
+            }
+        }
+    } else if (location == 'search') {
+        let searchTitles = document.getElementsByClassName('resultsList')[0].getElementsByTagName('li');
+        for (let i = 0; i < searchTitles.length; i++) {
+            if (title == searchTitles[i].textContent) {
+                return searchTitles[i];
+            }
+        }
+        return null;
+    }
+}
+
+function deleteGameFromCurrentArray(title) {
+    for (let i = 0; i < currentGameResults.length; i++) {
+        if (currentGameResults[i].Title == title) {
+            currentGameResults.splice(i, 1);
+        }
+    }
+}
+
+function clearGlobalGameArray() {
+    currentGameResults = [];
+}
+
+function isAlreadyInGlobalArray(game) {
+    for (let i = 0; i < currentGameResults.length; i++) {
+        if (game == currentGameResults[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 
 
 
