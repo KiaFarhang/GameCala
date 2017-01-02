@@ -11,12 +11,16 @@
 let currentGameResults = [];
 
 let timePlayedPerDay = null;
+var xStart = null;
+var yStart = null;
 let searchBox = document.getElementsByClassName('searchBox')[0];
 
 addEventListeners();
 document.getElementsByClassName('timeBox')[0].focus();
 
 function addEventListeners() {
+    document.addEventListener('touchstart', handleTouchStart, supportsPassive ? { passive: true } : false);
+    document.addEventListener('touchend', handleTouchMove, supportsPassive ? { passive: true } : false);
     document.forms[0].addEventListener('submit', handleTimeInput);
     searchBox.addEventListener('keyup', handleSearchInput);
     document.getElementsByClassName('goToCompare')[0].addEventListener('click', handleGoToCompare);
@@ -391,8 +395,58 @@ function isAlreadyInGlobalArray(game) {
     return false;
 }
 
+function handleTouchStart(event) {
+    xStart = event.touches[0].clientX;
+    yStart = event.touches[0].clientY;
+}
 
+function handleTouchMove(event) {
+    if (!xStart || !yStart) return;
 
+    var xEnd = event.changedTouches[0].clientX;
+    var yEnd = event.changedTouches[0].clientY;
+
+    var xTraveled = xEnd - xStart;
+    var yTraveled = yEnd - yStart;
+
+    if (Math.abs(yTraveled) > 30) return;
+    if (Math.abs(xTraveled) < 40) return;
+
+    let currentTab = getCurrentHeaderTab();
+
+    if (xTraveled > 0) {
+        let targetTab = currentTab + 2;
+        if (targetTab < 4 && isSectionAccessibleYet(targetTab) == true) {
+            transitionToSection(targetTab);
+            makeTabVisible(targetTab);
+        }
+    } else {
+        let targetTab = currentTab - 1;
+        if (targetTab > -1) {
+            transitionToSection(targetTab +1);
+        }
+    }
+
+    xEnd = null;
+    yEnd = null;
+}
+
+function isSectionAccessibleYet(section) {
+    let headerTabs = document.getElementsByTagName('header')[0].getElementsByTagName('div');
+    if (headerTabs[section - 1].classList.contains('hidden')) {
+        return false;
+    }
+    return true;
+}
+
+function getCurrentHeaderTab() {
+    let headerTabs = document.getElementsByTagName('header')[0].getElementsByTagName('div');
+    for (let i = 0; i < headerTabs.length; i++) {
+        if (headerTabs[i].classList.contains('current')) {
+            return i;
+        }
+    }
+}
 
 
 

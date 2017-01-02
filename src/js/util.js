@@ -8,9 +8,20 @@ function ajax(method, target) {
     return request;
 }
 
+//Test if browser supports passive event listeners
+
+let supportsPassive = false;
+try {
+    let opts = Object.defineProperty({}, 'passive', {
+        get: function() {
+            supportsPassive = true;
+        }
+    });
+    window.addEventListener('test', null, opts);
+} catch (e) {}
 
 
-//Swipe detection swiped from SO, test when live on mobile
+// Swipe detection swiped from SO, test when live on mobile
 
 // document.addEventListener('touchstart', handleTouchStart, false);
 // document.addEventListener('touchmove', handleTouchMove, false);
@@ -51,3 +62,32 @@ function ajax(method, target) {
 //     xDown = null;
 //     yDown = null;                                             
 // };
+
+// var xStart = null;
+// var yStart = null;
+
+// function handleTouchStart(event) {
+//     xStart = event.touches[0].clientX;
+//     yStart = event.touches[0].clientY;
+// }
+
+// function handleTouchMove(event) {
+//     if (!xDown || !yDown) return;
+
+//     var xEnd = event.touches[0].clientX;
+//     var yEnd = event.touches[0].clientY;
+
+//     var xTraveled = xEnd - xStart;
+//     var yTraveled = yEnd - yStart;
+
+//     if (Math.abs(yTraveled) > 100) return;
+
+//     if (xTraveled > 0) {
+//         console.log('You swiped left');
+//     } else {
+//         console.log('You swiped right');
+//     }
+
+//     xEnd = null;
+//     yEnd = null;
+// }
