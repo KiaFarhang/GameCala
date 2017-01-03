@@ -26,8 +26,8 @@ header {
         flex-basis: 33%;
         padding: .33rem;
         text-align: center;
-        &.current{
-        	box-shadow: 1px 1px 10px $black;
+        &.current {
+            box-shadow: 1px 1px 10px $black;
         }
         &:nth-of-type(1) {
             background: $orange;
@@ -58,12 +58,17 @@ section {
     position: absolute;
     top: 5rem;
     width: 100%;
-    button{
-    	background: $orange;
-    	border-radius: 3px;
-    	box-shadow: 1px 1px 1px $orange;
-    	color: $white;
-		padding: .25rem;
+    button {
+        background: $orange;
+        border-radius: 3px;
+        box-shadow: 1px 1px 1px $orange;
+        color: $white;
+        padding: .25rem;
+    }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
     input {
         background: $white;
@@ -89,7 +94,7 @@ section {
                     padding: .8rem;
                     transition: background 1s linear;
                     &.added {
-                    	box-shadow: 1px 1px 10px;
+                        box-shadow: 1px 1px 10px;
                         color: $black;
                     }
                     &:nth-of-type(1) {
@@ -177,11 +182,11 @@ section {
             // margin: .33rem 0;
             opacity: 1;
             transition: opacity .5s linear;
-            p.resultsTitle{
-            	font-size: 110%;
+            p.resultsTitle {
+                font-size: 110%;
             }
-            p:not(.resultsTitle){
-            	font-size: 90%;
+            p:not(.resultsTitle) {
+                font-size: 90%;
             }
             &.deleted {
                 opacity: 0;
@@ -230,7 +235,7 @@ section {
     }
 }
 
-.visible { 
+.visible {
     visibility: visible;
     opacity: 1;
     transition: opacity .5s linear;

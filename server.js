@@ -1,31 +1,20 @@
 'use strict';
 
 const express = require('express');
+const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 
 const query = require('./db_query.js');
 
-// var pg = require('pg');
 
 require('dotenv').config();
-
-// let pgConfig = {
-//     user: process.env.DB_USER,
-//     database: process.env.DB_NAME,
-//     password: process.env.DB_PASS,
-//     host: process.env.DB_HOST,
-//     port: process.env.DB_PORT,
-//     max: 10,
-//     idleTimeoutMillis: 30000
-// };
-
-// let pool = new pg.Pool(pgConfig);
 
 var app = express();
 
 let options = {
     root: __dirname
 };
+app.use(favicon(__dirname + '/dist/image/favicon.ico'));
 
 let jsonParser = bodyParser.json();
 let urlencodedParser = bodyParser.urlencoded({ extended: false });

@@ -1,0 +1,36 @@
+{
+  "name": "GameCala",
+  "short_name": "GameCala",
+  "start_url": "index.html",
+  "display": "standalone",
+  "lang": "en_US",
+  "orientation": "portrait-primary",
+  "background_color": "#3D3D3D",
+  "theme_color": "#FF471A",
+  "description": "Compare games' completion times and decide what to play next",
+  "icons": [{
+    "src": "img/icon48.png",
+    "sizes": "48x48",
+    "type": "image/png"
+  }, {
+    "src": "img/icon72.png",
+    "sizes": "72x72",
+    "type": "image/png"
+  }, {
+    "src": "img/icon96.png",
+    "sizes": "96x96",
+    "type": "image/png"
+  }, {
+    "src": "img/icon144.png",
+    "sizes": "144x144",
+    "type": "image/png"
+  }, {
+    "src": "img/icon168.png",
+    "sizes": "168x168",
+    "type": "image/png"
+  }, {
+    "src": "img/icon192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }]
+}

@@ -2,8 +2,7 @@
 
 // -Split results strings up to say week/weeks, add styling to properties 
 // -Make sure header is always on top (z-index?) Or remove fixed positioning
-// -Keep "Added" persistent even after searching for something else
-// -Tell user when values recalcultaed (where to send them on mobile?)
+// -Tell user when values recalculated (where to send them on mobile?)
 
 
 'use strict';
@@ -16,6 +15,7 @@ var yStart = null;
 let searchBox = document.getElementsByClassName('searchBox')[0];
 
 addEventListeners();
+setDailyTimeFromStorageIfExists();
 document.getElementsByClassName('timeBox')[0].focus();
 
 function addEventListeners() {
@@ -57,7 +57,6 @@ function handleGoToCompare() {
 
 function handleTimeInput(event) {
     event.preventDefault();
-    // let input = parseInt(document.getElementsByClassName('timeBox')[0].value);
     let input = document.getElementsByClassName('timeBox')[0].value;
 
     if (isNaN(input) || input > 24) {
@@ -65,15 +64,14 @@ function handleTimeInput(event) {
         return;
     }
 
-
     document.forms[0].classList.remove('error');
-    if (timePlayedPerDay == null) {
-        timePlayedPerDay = input;
+    timePlayedPerDay = input;
+    localStorage.setItem('dailyTime', input);
+    if (isSectionAccessibleYet(2) == false) {
         makeTabVisible(2);
         transitionToSection(2);
         document.getElementsByClassName('searchBox')[0].focus();
     } else {
-        timePlayedPerDay = input;
         clearComparePane();
         for (let i = 0; i < currentGameResults.length; i++) {
             appendGameToCompareList(currentGameResults[i]);
@@ -144,6 +142,9 @@ function displayGamesInSearch(arrayOfGames) {
         let title = arrayOfGames[i].Title;
         let li = document.createElement('li');
         li.textContent = title;
+        if (isAlreadyInResults(title)){
+        	li.classList.add('added');
+        }
         let clickFunction = constructGameEventListener(arrayOfGames[i]);
         li.addEventListener('click', clickFunction);
         list.appendChild(li);
@@ -409,12 +410,12 @@ function handleTouchMove(event) {
     var xTraveled = xEnd - xStart;
     var yTraveled = yEnd - yStart;
 
-    if (Math.abs(yTraveled) > 30) return;
+    if (Math.abs(yTraveled) > 100) return;
     if (Math.abs(xTraveled) < 40) return;
 
     let currentTab = getCurrentHeaderTab();
 
-    if (xTraveled > 0) {
+    if (xTraveled < 0) {
         let targetTab = currentTab + 2;
         if (targetTab < 4 && isSectionAccessibleYet(targetTab) == true) {
             transitionToSection(targetTab);
@@ -423,7 +424,7 @@ function handleTouchMove(event) {
     } else {
         let targetTab = currentTab - 1;
         if (targetTab > -1) {
-            transitionToSection(targetTab +1);
+            transitionToSection(targetTab + 1);
         }
     }
 
@@ -448,6 +449,11 @@ function getCurrentHeaderTab() {
     }
 }
 
+function setDailyTimeFromStorageIfExists() {
+    if (localStorage.getItem('dailyTime') != null) {
+        document.getElementsByClassName('timeBox')[0].value = localStorage.getItem('dailyTime');
+    }
+}
 
 
 // function handleSearchInput() {
