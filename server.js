@@ -14,7 +14,7 @@ var app = express();
 let options = {
     root: __dirname
 };
-app.use(favicon(__dirname + '/dist/image/favicon.ico'));
+app.use(favicon(__dirname + '/dist/img/favicon.ico'));
 
 let jsonParser = bodyParser.json();
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
