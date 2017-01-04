@@ -1,13 +1,31 @@
 // TODO:
 
 // -Split results strings up to say week/weeks, add styling to properties 
-// -Make sure header is always on top (z-index?) Or remove fixed positioning
 // -Tell user when values recalculated (where to send them on mobile?)
+// -Set time > start searching > go back and change time > nothing happens
 
 
 'use strict';
 
 let currentGameResults = [];
+
+let phone = isScreenSmallerThan(768);
+
+(function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+ga('create', 'UA-89606633-2', 'auto');
+ga('send', 'pageview');
+
 
 let timePlayedPerDay = null;
 var xStart = null;
@@ -19,17 +37,20 @@ setDailyTimeFromStorageIfExists();
 document.getElementsByClassName('timeBox')[0].focus();
 
 function addEventListeners() {
-    document.addEventListener('touchstart', handleTouchStart, supportsPassive ? { passive: true } : false);
-    document.addEventListener('touchend', handleTouchMove, supportsPassive ? { passive: true } : false);
+    if (phone) {
+        document.addEventListener('touchstart', handleTouchStart, supportsPassive ? { passive: true } : false);
+        document.addEventListener('touchend', handleTouchMove, supportsPassive ? { passive: true } : false);
+    }
     document.forms[0].addEventListener('submit', handleTimeInput);
     searchBox.addEventListener('keyup', handleSearchInput);
     document.getElementsByClassName('goToCompare')[0].addEventListener('click', handleGoToCompare);
-
-    let headerTabs = document.getElementsByTagName('header')[0].getElementsByTagName('div');
-    for (let i = 0; i < headerTabs.length; i++) {
-        headerTabs[i].addEventListener('click', function() {
-            transitionToSection(i + 1);
-        });
+    if (phone) {
+        let headerTabs = document.getElementsByTagName('header')[0].getElementsByTagName('div');
+        for (let i = 0; i < headerTabs.length; i++) {
+            headerTabs[i].addEventListener('click', function() {
+                transitionToSection(i + 1);
+            });
+        }
     }
 
     document.getElementsByClassName('clearComparePane')[0].addEventListener('click', clearComparePane);
@@ -52,6 +73,10 @@ function handleGoToCompare() {
         document.getElementsByClassName('compareError')[0].textContent = '';
         makeTabVisible(3);
         transitionToSection(3);
+        if (!phone) {
+            document.getElementsByClassName('goToCompare')[0].classList.remove('visibile');
+            document.getElementsByClassName('goToCompare')[0].classList.add('hidden');
+        }
     }
 }
 
@@ -142,8 +167,8 @@ function displayGamesInSearch(arrayOfGames) {
         let title = arrayOfGames[i].Title;
         let li = document.createElement('li');
         li.textContent = title;
-        if (isAlreadyInResults(title)){
-        	li.classList.add('added');
+        if (isAlreadyInResults(title)) {
+            li.classList.add('added');
         }
         let clickFunction = constructGameEventListener(arrayOfGames[i]);
         li.addEventListener('click', clickFunction);
@@ -281,9 +306,10 @@ function parseDateIntoString(date) {
 
 function visibilityToggle(sectionOn) {
     let toFadeIn = document.getElementsByTagName('section')[sectionOn - 1];
-    let toFadeOut = getCurrentVisibleSection();
-
-    changeVisibility(toFadeOut);
+    if (phone) {
+        let toFadeOut = getCurrentVisibleSection();
+        changeVisibility(toFadeOut);
+    }
     changeVisibility(toFadeIn);
 }
 

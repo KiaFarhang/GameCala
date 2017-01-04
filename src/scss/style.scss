@@ -19,7 +19,7 @@ body {
 
 header {
     display: flex;
-    position: fixed;
+    // position: fixed;
     top: 0;
     width: 100%;
     div {
@@ -63,6 +63,7 @@ section {
         border-radius: 3px;
         box-shadow: 1px 1px 1px $orange;
         color: $white;
+        cursor: pointer;
         padding: .25rem;
     }
     input[type=number]::-webkit-inner-spin-button,
@@ -91,6 +92,7 @@ section {
             ul.resultsList {
                 list-style-type: none;
                 li {
+                    cursor: pointer;
                     padding: .8rem;
                     transition: background 1s linear;
                     &.added {
@@ -195,6 +197,7 @@ section {
                 background: $blue;
                 border-radius: .5rem;
                 color: $black;
+                cursor: pointer;
                 float: right;
                 height: 1.5rem;
                 right: 1rem;
@@ -235,6 +238,13 @@ section {
     }
 }
 
+footer {
+    div.info {
+        position: absolute;
+        bottom: 1rem;
+    }
+}
+
 .visible {
     visibility: visible;
     opacity: 1;
@@ -251,5 +261,53 @@ form.error {
     &::after {
         content: 'Please enter a number up to 24.';
         display: block;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    header {
+        div {
+            &:nth-of-type(1) {
+                flex-basis: 29%;
+            }
+            &:nth-of-type(2) {
+                flex-basis: 35%;
+            }
+            &:nth-of-type(3) {
+                flex-basis: 33%;
+            }
+        }
+    }
+    main {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        margin: 0;
+        section {
+            // flex-basis: 33%;
+            position: relative;
+            width: 0;
+            p{
+                &:first-of-type{
+                    text-align: center;
+                }
+            }
+            &.one {
+                flex-basis: 29%;
+                top: 5rem;
+                input{
+                    width: 30%;
+                }
+            }
+            &.two {
+                flex-basis: 35%;
+            }
+            &.three {
+                flex-basis: 33%;
+            }
+            input {
+                width: 100%;
+            }
+        }
     }
 }

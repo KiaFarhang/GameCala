@@ -21,6 +21,16 @@ try {
 } catch (e) {}
 
 
+function isScreenSmallerThan(size) {
+    let mq = window.matchMedia(`screen and (min-width: ${size}px)`);
+    if (mq.matches) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
 // Swipe detection swiped from SO, test when live on mobile
 
 // document.addEventListener('touchstart', handleTouchStart, false);
