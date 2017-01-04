@@ -1,9 +1,7 @@
 // TODO:
 
-// -Split results strings up to say week/weeks, add styling to properties 
-// -Tell user when values recalculated (where to send them on mobile?)
-// -Set time > start searching > go back and change time > nothing happens
-
+// -Split results strings up to say week/weeks, add styling to properties
+// -Keep buttons in one place 
 
 'use strict';
 
@@ -97,6 +95,11 @@ function handleTimeInput(event) {
         transitionToSection(2);
         document.getElementsByClassName('searchBox')[0].focus();
     } else {
+        let info = document.getElementsByClassName('one')[0].getElementsByClassName('info')[0];
+        info.textContent = 'Time updated';
+        setTimeout(function() {
+            info.textContent = '';
+        }, 1500);
         clearComparePane();
         for (let i = 0; i < currentGameResults.length; i++) {
             appendGameToCompareList(currentGameResults[i]);

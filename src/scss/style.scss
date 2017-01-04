@@ -181,7 +181,7 @@ section {
         div.compareGame {
             background: $orange;
             padding: .33rem;
-            // margin: .33rem 0;
+            margin: 1rem 0;
             opacity: 1;
             transition: opacity .5s linear;
             p.resultsTitle {
@@ -287,26 +287,43 @@ form.error {
             // flex-basis: 33%;
             position: relative;
             width: 0;
-            p{
-                &:first-of-type{
+            p {
+                &:first-of-type {
+                    min-height: 64px;
                     text-align: center;
                 }
             }
             &.one {
                 flex-basis: 29%;
                 top: 5rem;
-                input{
-                    width: 30%;
-                }
             }
             &.two {
                 flex-basis: 35%;
             }
             &.three {
                 flex-basis: 33%;
+                div.compare {
+                    margin-top: 1.5rem;
+                }
             }
             input {
                 width: 100%;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    main {
+        section {
+        	min-height: 735px;
+            &.one {
+            	form{
+            		text-align: center;
+            	}
+                input {
+                    width: 75%; 
+                }
             }
         }
     }
