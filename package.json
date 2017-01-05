@@ -1,13 +1,13 @@
 {
-  "name": "name_here",
-  "version": "0.0.1",
-  "description": "description here",
+  "name": "GameCala",
+  "version": "1.0.0",
+  "description": "Compare video games by length to find out what to play next.",
   "main": "server.js",
   "scripts": {
     "start": "node scraper.js"
   },
   "keywords": [],
-  "repository": "REPOSITORY HERE",
+  "repository": "https://github.com/KiaFarhang/GameCala",
   "author": "Kia Farhang <kfarhang0@gmail.com>",
   "license": "ISC",
   "devDependencies": {
